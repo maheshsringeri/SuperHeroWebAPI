@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,7 @@ namespace SuperHeroWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<SuperHero>>> Get()
         {
             return Ok(await _context.SuperHeroes.ToListAsync());
@@ -107,7 +109,7 @@ namespace SuperHeroWebAPI.Controllers
             if (hero == null)
                 return NotFound("Hero is not found");
 
-             _context.SuperHeroes.Remove(hero);
+            _context.SuperHeroes.Remove(hero);
 
             await _context.SaveChangesAsync();
 
